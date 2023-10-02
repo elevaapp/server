@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"the-end-store-api/database"
-	"the-end-store-api/router"
+	"the-perfect-workout-organizer/src/database"
+	"the-perfect-workout-organizer/src/router"
 
 	"github.com/gofiber/fiber/v2"
 )
