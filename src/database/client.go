@@ -1,7 +1,19 @@
 package database
 
-import "gorm.io/gorm"
+import (
+	"the-perfect-workout-organizer/src/utils"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
 
 var Client *gorm.DB
 
-func Connect() {}
+func Connect() {
+	client, err := gorm.Open(postgres.Open(utils.GetEnv("DATABASE_URL")), &gorm.Config{})
+	if err != nil {
+		panic("could not connect to database")
+	}
+
+	Client = client
+}
