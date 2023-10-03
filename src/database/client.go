@@ -1,7 +1,7 @@
 package database
 
 import (
-	"the-perfect-workout-organizer/src/utils"
+	"eleva/src/utils"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"eleva/src/database"
+	"eleva/src/router"
 	"log"
-	"the-perfect-workout-organizer/src/database"
-	"the-perfect-workout-organizer/src/router"
 
 	"github.com/gofiber/fiber/v2"
 )

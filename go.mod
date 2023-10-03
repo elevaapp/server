@@ -1,4 +1,4 @@
-module the-perfect-workout-organizer
+module eleva
 
 go 1.21.1
 
