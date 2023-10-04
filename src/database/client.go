@@ -1,6 +1,7 @@
 package database
 
 import (
+	"eleva/src/database/models"
 	"eleva/src/utils"
 
 	"gorm.io/driver/postgres"
@@ -14,6 +15,8 @@ func Connect() {
 	if err != nil {
 		panic("could not connect to database")
 	}
+
+	client.AutoMigrate(&models.User{})
 
 	Client = client
 }
