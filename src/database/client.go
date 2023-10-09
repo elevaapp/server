@@ -16,7 +16,7 @@ func Connect() {
 		panic("could not connect to database")
 	}
 
-	client.AutoMigrate(&models.User{})
+	client.AutoMigrate(&models.User{}, &models.VerificationCode{})
 
 	Client = client
 }

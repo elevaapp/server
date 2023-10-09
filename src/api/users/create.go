@@ -4,6 +4,8 @@ import (
 	"eleva/src/database"
 	"eleva/src/database/models"
 	"eleva/src/utils"
+	"fmt"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -42,10 +44,23 @@ func Create(ctx *fiber.Ctx) error {
 
 	database.Client.Create(&user)
 
+	verificationCode, err := utils.GenerateVerificationCode()
+	if err != nil {
+		return utils.ThrowError(ctx, 502, err)
+	}
+
+	database.Client.Create(&models.VerificationCode{
+		UserId:    userId,
+		Code:      verificationCode,
+		ExpiresAt: time.Now().Unix() + 1800,
+	})
+
+	emailBody := fmt.Sprintf("You have just created a new account at the perfect workout organization app for you.\n Though, you still need to verify your account. Here's your verification code: %s. It will expire in 30 minutes.", verificationCode)
+
 	email := utils.Email{
 		To:      body.Email,
 		Subject: "Your new account at Eleva",
-		Body:    "You have just created a new account at the perfect workout organization app for you",
+		Body:    emailBody,
 	}
 
 	err = email.Send()

@@ -77,6 +77,10 @@ func LoadValidator() {
 			"required_without_all",
 			"{0} is optional, but required if you don't provide any other field",
 		},
+		{
+			"number",
+			"{0} must be a number",
+		},
 	}
 
 	Validator = RegisterTranslations(Validator, translations)
