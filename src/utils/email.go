@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"errors"
 	"strconv"
 
-	"github.com/go-mail/mail/v2"
+	mail "github.com/xhit/go-simple-mail"
 )
 
 type Email struct {
@@ -13,20 +14,29 @@ type Email struct {
 }
 
 func (email *Email) Send() error {
+	username := GetEnv("EMAIL_USERNAME")
 	sender := GetEnv("EMAIL_SENDER")
 	emailPassword := GetEnv("EMAIL_SENDER_PASSWORD")
 	host := GetEnv("EMAIL_HOST")
 	port, _ := strconv.Atoi(GetEnv("EMAIL_PORT"))
 
-	newMail := mail.NewMessage()
+	server := mail.NewSMTPClient()
+	server.Host = host
+	server.Port = port
+	server.Username = username
+	server.Password = emailPassword
 
-	newMail.SetHeaders(map[string][]string{
-		"From":    {sender},
-		"To":      {email.To},
-		"Subject": {email.Subject},
-	})
-	newMail.SetBody("text/html", email.Body)
+	client, err := server.Connect()
+	if err != nil {
+		return err
+	}
+	newMail := mail.NewMSG()
 
-	dialer := mail.NewDialer(host, port, sender, emailPassword)
-	return dialer.DialAndSend(newMail)
+	newMail.SetFrom(sender).AddTo(email.To).SetSubject(email.Subject).SetBody(mail.TextHTML, email.Body)
+	err = newMail.Send(client)
+	if err != nil {
+		return errors.New("could not send email")
+	}
+
+	return nil
 }

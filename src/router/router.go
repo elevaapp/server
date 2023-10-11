@@ -15,7 +15,7 @@ func MountRoutes(app *fiber.App) {
 
 	// /users
 	router.Post("/users", users.Create)
-	router.Post("/users/verify", users.VerifyById)
+	router.Post("/users/verify", users.Verify)
 
 	app.Mount("/", router)
 }

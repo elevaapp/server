@@ -4,26 +4,23 @@ import (
 	"eleva/src/database"
 	"eleva/src/database/models"
 	"eleva/src/utils"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type VerifyUserByIdBody struct {
+type VerifyUserBody struct {
 	Code string `json:"code" validate:"required,number"`
 }
 
-func VerifyById(ctx *fiber.Ctx) error {
-	body, errors := utils.ValidateBody[VerifyUserByIdBody](ctx)
+func Verify(ctx *fiber.Ctx) error {
+	body, errors := utils.ValidateBody[VerifyUserBody](ctx)
 	if len(errors) != 0 {
 		return utils.ThrowError(ctx, fiber.StatusBadRequest, errors)
 	}
 
-	fmt.Println(ctx.GetReqHeaders())
-
 	userToken := ctx.GetReqHeaders()["Authorization"]
 	if userToken == "" {
-		return utils.ThrowError(ctx, fiber.StatusBadRequest, "invalid authorization identifier")
+		return utils.ThrowError(ctx, fiber.StatusUnauthorized, "invalid authorization identifier")
 	}
 
 	user := &models.User{}
@@ -37,7 +34,7 @@ func VerifyById(ctx *fiber.Ctx) error {
 	database.Client.Where("code = ?", body.Code).Where("user_id = ?", user.Id).First(verificationCode)
 
 	if verificationCode.ExpiresAt == 0 {
-		return utils.ThrowError(ctx, fiber.StatusNotFound, "invalid verification code")
+		return utils.ThrowError(ctx, fiber.StatusBadRequest, "invalid verification code")
 	}
 
 	// Later there will be a goroutine that automatically deletes expired verification codes

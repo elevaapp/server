@@ -9,8 +9,8 @@ import (
 )
 
 type LoginRequestBody struct {
-	Id       string `json:"id" validate:"required,alphanum"`
-	Password string `json:"password" validate:"required,alphanum"`
+	Name     string `json:"name" validate:"required,alphanum"`
+	Password string `json:"password" validate:"required"`
 }
 
 type LoginResponseBody struct {
@@ -24,7 +24,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	user := &models.User{}
-	database.Client.Where("id = ?", body.Id).First(user)
+	database.Client.Where("name = ?", body.Name).First(user)
 
 	if user.Id == "" {
 		return utils.ThrowError(ctx, fiber.StatusNotFound, "user not found")
@@ -33,7 +33,7 @@ func Login(ctx *fiber.Ctx) error {
 	isPasswordCorrect := utils.CompareEncryptedPasswords(body.Password, user.Password)
 
 	if !isPasswordCorrect {
-		return utils.ThrowError(ctx, fiber.StatusUnauthorized, "id or password are incorrect")
+		return utils.ThrowError(ctx, fiber.StatusUnauthorized, "name or password are incorrect")
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(LoginResponseBody{
