@@ -21,15 +21,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Set up environment variables
-      env:
-        DATABASE_URL: ${{vars.DATABASE_URL}}
-        EMAIL_SENDER: ${{vars.EMAIL_SENDER}}
-        EMAIL_SENDER_PASSWORD: ${{vars.EMAIL_SENDER_PASSWORD}}
-        EMAIL_HOST: ${{vars.EMAIL_HOST}}
-        EMAIL_USERNAME: ${{vars.EMAIL_USERNAME}}
-        SALT_VALUE: ${{SALT_VALUE}}
-  
     - uses: actions/checkout@v3
 
     - name: Set up Go
