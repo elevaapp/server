@@ -10,11 +10,9 @@ import (
 func TestSendEmailSuccess(t *testing.T) {
 	assert := assert.New(t)
 
-	t.Setenv("EMAIL_SENDER", "0680e6c3ef4c4d@example.com")
-	t.Setenv("EMAIL_USERNAME", "0680e6c3ef4c4d")
-	t.Setenv("EMAIL_SENDER_PASSWORD", "965685c0a2ab65")
-	t.Setenv("EMAIL_HOST", "sandbox.smtp.mailtrap.io")
-	t.Setenv("EMAIL_PORT", "587")
+	t.Setenv("EMAIL_SENDER", GetEnv("FAKE_EMAIL_SENDER"))
+	t.Setenv("EMAIL_USERNAME", GetEnv("FAKE_EMAIL_USERNAME"))
+	t.Setenv("EMAIL_SENDER_PASSWORD", GetEnv("FAKE_EMAIL_SENDER_PASSWORD"))
 
 	email := Email{
 		To:      tests.GenerateRandomEmail(),
@@ -27,6 +25,10 @@ func TestSendEmailSuccess(t *testing.T) {
 
 func TestSendEmailInvalidCredentials(t *testing.T) {
 	assert := assert.New(t)
+
+	t.Setenv("EMAIL_SENDER", "")
+	t.Setenv("EMAIL_USERNAME", "")
+	t.Setenv("EMAIL_SENDER_PASSWORD", "")
 
 	email := Email{
 		To:      tests.GenerateRandomEmail(),

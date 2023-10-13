@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"eleva/src/api/users"
 	"eleva/src/database"
+	"eleva/src/utils"
 	"eleva/src/utils/tests"
 	"eleva/src/validation"
 	"encoding/json"
@@ -36,11 +37,9 @@ func TestLoginSuccess(t *testing.T) {
 	app := fiber.New()
 	validation.LoadValidator()
 
-	t.Setenv("EMAIL_SENDER", "0680e6c3ef4c4d@example.com")
-	t.Setenv("EMAIL_USERNAME", "0680e6c3ef4c4d")
-	t.Setenv("EMAIL_SENDER_PASSWORD", "965685c0a2ab65")
-	t.Setenv("EMAIL_HOST", "sandbox.smtp.mailtrap.io")
-	t.Setenv("EMAIL_PORT", "587")
+	t.Setenv("EMAIL_SENDER", utils.GetEnv("FAKE_EMAIL_SENDER"))
+	t.Setenv("EMAIL_USERNAME", utils.GetEnv("FAKE_EMAIL_USERNAME"))
+	t.Setenv("EMAIL_SENDER_PASSWORD", utils.GetEnv("FAKE_EMAIL_SENDER_PASSWORD"))
 
 	app.Post("/users", users.Create)
 	app.Post("/auth/login", Login)
@@ -80,11 +79,9 @@ func TestLoginUserNotFound(t *testing.T) {
 	app := fiber.New()
 	validation.LoadValidator()
 
-	t.Setenv("EMAIL_SENDER", "0680e6c3ef4c4d@example.com")
-	t.Setenv("EMAIL_USERNAME", "0680e6c3ef4c4d")
-	t.Setenv("EMAIL_SENDER_PASSWORD", "965685c0a2ab65")
-	t.Setenv("EMAIL_HOST", "sandbox.smtp.mailtrap.io")
-	t.Setenv("EMAIL_PORT", "587")
+	t.Setenv("EMAIL_SENDER", utils.GetEnv("FAKE_EMAIL_SENDER"))
+	t.Setenv("EMAIL_USERNAME", utils.GetEnv("FAKE_EMAIL_USERNAME"))
+	t.Setenv("EMAIL_SENDER_PASSWORD", utils.GetEnv("FAKE_EMAIL_SENDER_PASSWORD"))
 
 	app.Post("/users", users.Create)
 	app.Post("/auth/login", Login)
@@ -124,11 +121,9 @@ func TestLoginWrongPassword(t *testing.T) {
 	app := fiber.New()
 	validation.LoadValidator()
 
-	t.Setenv("EMAIL_SENDER", "0680e6c3ef4c4d@example.com")
-	t.Setenv("EMAIL_USERNAME", "0680e6c3ef4c4d")
-	t.Setenv("EMAIL_SENDER_PASSWORD", "965685c0a2ab65")
-	t.Setenv("EMAIL_HOST", "sandbox.smtp.mailtrap.io")
-	t.Setenv("EMAIL_PORT", "587")
+	t.Setenv("EMAIL_SENDER", utils.GetEnv("FAKE_EMAIL_SENDER"))
+	t.Setenv("EMAIL_USERNAME", utils.GetEnv("FAKE_EMAIL_USERNAME"))
+	t.Setenv("EMAIL_SENDER_PASSWORD", utils.GetEnv("FAKE_EMAIL_SENDER_PASSWORD"))
 
 	app.Post("/users", users.Create)
 	app.Post("/auth/login", Login)

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"errors"
+	"fmt"
 	"strconv"
 
 	mail "github.com/xhit/go-simple-mail"
@@ -25,6 +25,7 @@ func (email *Email) Send() error {
 	server.Port = port
 	server.Username = username
 	server.Password = emailPassword
+	server.Encryption = mail.EncryptionTLS
 
 	client, err := server.Connect()
 	if err != nil {
@@ -35,7 +36,7 @@ func (email *Email) Send() error {
 	newMail.SetFrom(sender).AddTo(email.To).SetSubject(email.Subject).SetBody(mail.TextHTML, email.Body)
 	err = newMail.Send(client)
 	if err != nil {
-		return errors.New("could not send email")
+		return fmt.Errorf("could not send email: %s", err.Error())
 	}
 
 	return nil

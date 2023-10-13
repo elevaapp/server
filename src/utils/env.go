@@ -8,7 +8,10 @@ import (
 )
 
 func GetEnv(key string) string {
-	envMap, _ := godotenv.Read(".env")
+	workingDirectory, _ := os.Getwd()
+	basePath := strings.Split(workingDirectory, "src")[0]
+
+	envMap, _ := godotenv.Read(basePath + "/.env")
 
 	for _, key := range os.Environ() {
 		variable := strings.SplitN(key, "=", 2)

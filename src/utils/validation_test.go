@@ -5,8 +5,6 @@ import (
 	"eleva/src/utils/tests"
 	"eleva/src/validation"
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -47,9 +45,6 @@ func TestValidateBodySuccess(t *testing.T) {
 
 	response, err := app.Test(request, -1)
 	assert.NoError(err)
-
-	responseBody, _ := io.ReadAll(response.Body)
-	fmt.Println(string(responseBody))
 	assert.Equal(fiber.StatusOK, response.StatusCode)
 }
 
