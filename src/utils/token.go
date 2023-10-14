@@ -1,12 +1,12 @@
 package utils
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
 	"eleva/src/database/models"
 	"encoding/base64"
 	"fmt"
 	"time"
+
+	"github.com/kcorlidy/dangerous"
 )
 
 func GenerateToken(user models.User) string {
@@ -14,9 +14,17 @@ func GenerateToken(user models.User) string {
 	timestampWhenTokenWasCreated := base64.URLEncoding.EncodeToString([]byte(fmt.Sprint(time.Now().Unix())))
 	token := fmt.Sprintf("%s.%s.", userIdEncodedToBase64, timestampWhenTokenWasCreated)
 
-	hmacComponentWithEmailAndPassword := hmac.New(sha256.New, []byte(fmt.Sprintf("%s+%s", user.Email, user.Password)))
+	secret := GetEnv("ENCRYPTION_KEY")
+	data := map[string]interface{}{
+		"email":    user.Email,
+		"password": user.Password,
+	}
 
-	sha := base64.URLEncoding.EncodeToString(hmacComponentWithEmailAndPassword.Sum(nil))
+	serializer := dangerous.Serializer{
+		Secret: secret,
+		Salt:   "auth",
+	}
+	result, _ := serializer.URLSafeDumps(data)
 
-	return token + sha
+	return token + string(result)
 }
