@@ -16,6 +16,7 @@ func GenerateToken(user models.User) string {
 
 	secret := GetEnv("ENCRYPTION_KEY")
 	data := map[string]interface{}{
+		"id":       user.Id,
 		"email":    user.Email,
 		"password": user.Password,
 	}
